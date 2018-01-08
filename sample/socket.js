@@ -1,19 +1,21 @@
 let io = require('socket.io').listen(8080);
+let cat = require('cat');
 
 io.sockets.on('connection', function (socket) {
-    let count = 0;
     setInterval(() => {
-        count++;
-        socket.emit('position', {
-            sensor: {
-                left: 100 + count++,
-                leftfront: 120 + count++,
-                right: 150 + count++,
-                rightfront: 120 + count++
+        cat("/dev/rtlightsensor0", function (er, data) {
+            let sen = data.replace("\n", "").split(" ");
+            for (let i = 0; i < sen.length; i++) {
+                sen[i] = parseInt(sen[i]);
             }
+            socket.emit('position', {
+                sensor :{
+                    rightfront: parseInt(sen[0]),
+                    right: parseInt(sen[1]),
+                    left: parseInt(sen[2]),
+                    leftfront: parseInt(sen[3])
+                }
+            });
         });
-        if (count > 100) {
-            count = 0;
-        }
     }, 100);
 });

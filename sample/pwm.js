@@ -4,11 +4,11 @@ let hzRight = 2000;
 let hzLeft = 1000;
 
 let rightPwm = new PWM({
-    pin: "GPIO12", //右側モーターのピン番号を指定します。
+    pin: "GPIO12", //右側モーターのピンを指定します。
     frequency: hzRight
 });
 let leftPwm = new PWM({
-    pin: "GPIO13", //左側モーターのピン番号を指定します。
+    pin: "GPIO13", //左側モーターのピンを指定します。
     frequency: hzLeft
 });
 rightPwm.write(0.5);

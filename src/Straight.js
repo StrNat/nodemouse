@@ -51,6 +51,10 @@ class Straight extends Motion {
                         velocity: maxVelocity,
                         acc: 0
                     });
+                } else {
+                    Model.setParam({
+                        acc: tmpAcc
+                    });
                 }
                 if (this.sequence !== "DECC") {
                     break;

@@ -6,12 +6,11 @@ const tread = 80;
 const tire = 48;
 const pulsePerVelocity = (360.0 / 400) * (tire / 2) * (Math.PI / 180);
 
-const wall_left = 300;
-const wall_right = 400;
-const wall_left_max = 800;
-const wall_right_max = 550;
-const th_r = 420;
-const th_l = 520;
+const rightWallThreshold = 400;
+const leftWallThreshold = 300;
+
+const rightWallIdeal = 420;
+const leftWallIdeal = 520;
 
 let velocity = 0;
 let acc = 0;
@@ -141,12 +140,12 @@ let getCtrlValue = function () {
     let check = 0;
     let error = 0;
 
-    if (sensor.right > wall_right) {
-        error += sensor.right - th_r;
+    if (sensor.right > rightWallThreshold) {
+        error += sensor.right - rightWallIdeal;
         check++;
     }
-    if (sensor.left > wall_left) {
-        error += sensor.left - th_l;
+    if (sensor.left > leftWallThreshold) {
+        error += sensor.left - leftWallIdeal;
         check++;
     }
     if (check === 1) {

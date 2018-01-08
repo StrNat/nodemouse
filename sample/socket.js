@@ -1,6 +1,6 @@
 let io = require('socket.io').listen(8080);
 
-io.sockets.on('connection', (socket) => {
+io.sockets.on('connection', function (socket) {
     let count = 0;
     setInterval(() => {
         count++;

@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "autoreload": "supervisor -- main.js -i node_modules",
-    "autostart": "node main.js"
+    "autoreload": "supervisor -- src/main.js -i node_modules",
+    "autostart": "node src/main.js"
   },
   "repository": {
     "type": "git",

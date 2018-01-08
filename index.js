@@ -30,7 +30,7 @@ let setup = function () {
 
 let main = function () {
     setup();
-    io.sockets.on('connection', function (sck) {
+    io.sockets.on('connection', (sck) => {
         socket = sck;
     });
     timer.setInterval(() => {

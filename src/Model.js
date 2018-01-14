@@ -4,7 +4,7 @@ let PWM = require("raspi-pwm").PWM;
 
 const tread = 80;
 const tire = 48;
-const pulsePerVelocity = (360.0 / 400) * (tire / 2) * (Math.PI / 180);
+const velocityPerPulse = (360.0 / 400) * (tire / 2) * (Math.PI / 180);
 
 const rightWallThreshold = 400;
 const leftWallThreshold = 300;
@@ -102,8 +102,8 @@ class Model {
         let rightVelocity = velocity + (angVelocity * tread / 2) + ctrl;
         let leftVelocity = velocity - (angVelocity * tread / 2) - ctrl;
 
-        let hzRight = Math.abs(parseInt(rightVelocity / pulsePerVelocity));
-        let hzLeft = Math.abs(parseInt(leftVelocity / pulsePerVelocity));
+        let hzRight = Math.abs(parseInt(rightVelocity / velocityPerPulse));
+        let hzLeft = Math.abs(parseInt(leftVelocity / velocityPerPulse));
 
         let rightPWM = new PWM({
             pin: "GPIO12",

@@ -6,11 +6,13 @@ const tread = 80;
 const tire = 48;
 const velocityPerPulse = (360.0 / 400) * (tire / 2) * (Math.PI / 180);
 
-const rightWallThreshold = 400;
-const leftWallThreshold = 300;
+//センサーの理想値
+const rightSensorIdeal = 420;
+const leftSensorIdeal = 520;
 
-const rightWallIdeal = 420;
-const leftWallIdeal = 520;
+//制御するための壁があることを判別する閾値
+const rightSensorThreshold = rightSensorIdeal - 50;
+const leftSensorThreashold = leftSensorIdeal - 100;
 
 let velocity = 0;
 let acc = 0;
@@ -89,18 +91,21 @@ class Model {
 
     }
     static calcuration() {
-        velocity += acc * dt;
-        angVelocity += angAcc * dt;
-        distance += Math.abs(velocity) * dt;
-        angle += Math.abs(angVelocity) * dt;
+        velocity += acc * dt; //速度の計算
+        angVelocity += angAcc * dt; //角速度の計算
+        distance += Math.abs(velocity) * dt; //距離の計算
+        angle += Math.abs(angVelocity) * dt; //角度の計算
 
         let ctrl = 0;
-        if (ctrlEnable) {
+        if (ctrlEnable) { //壁制御を許可したときだけ
             ctrl = getCtrlValue() * gainP;
         }
 
-        let rightVelocity = velocity + (angVelocity * tread / 2) + ctrl;
-        let leftVelocity = velocity - (angVelocity * tread / 2) - ctrl;
+        // let rightVelocity = velocity + (angVelocity * tread / 2) + ctrl; //並進運動の説明をしないためコメントアウト。旋回などするときに必須。
+        // let leftVelocity = velocity - (angVelocity * tread / 2) - ctrl;  //並進運動の説明をしないためコメントアウト。旋回などするときに必須。
+
+        let rightVelocity = velocity + ctrl;
+        let leftVelocity = velocity - ctrl;
 
         let hzRight = Math.abs(parseInt(rightVelocity / velocityPerPulse));
         let hzLeft = Math.abs(parseInt(leftVelocity / velocityPerPulse));
@@ -140,15 +145,15 @@ let getCtrlValue = function () {
     let check = 0;
     let error = 0;
 
-    if (sensor.right > rightWallThreshold) {
-        error += sensor.right - rightWallIdeal;
+    if (sensor.right > rightSensorThreshold) {  //センサー値が閾値を超えてるとき
+        error += sensor.right - rightSensorIdeal;
         check++;
     }
-    if (sensor.left > leftWallThreshold) {
-        error += sensor.left - leftWallIdeal;
+    if (sensor.left > leftSensorThreashold) { //センサー値が閾値を超えてるとき
+        error += sensor.left - leftSensorIdeal;
         check++;
     }
-    if (check === 1) {
+    if (check === 1) {  //片方の壁しかないとき、値を２倍しないと、制御量が足りない。
         error *= 2;
     }
     return error;
